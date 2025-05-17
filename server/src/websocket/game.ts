@@ -3,6 +3,7 @@ import Size from "./size";
 
 export default class Game {
     private readonly pointsBase = 1
+    private started = false;
     private readonly size: Size = { w: 640, h: 480 }
 
     readonly players: Player[] = [];
@@ -25,6 +26,7 @@ export default class Game {
     }
 
     startGame() {
+        if (this.started) return
         console.log(this.players)
         const playerData = this.players.map(player => ({
             id: player.uuid,
@@ -33,6 +35,7 @@ export default class Game {
         this.players.forEach(player => {
             player.socket.emit('gameStart', playerData);
         });
+        this.started = true;
         setInterval(() => this.updateGame(), 100);
     }
 
