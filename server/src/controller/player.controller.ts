@@ -1,7 +1,10 @@
-import User from "../database/user";
+import User from "../model/player.model";
 
 export default class PlayerController {
-    async createPlayer(name: string) {
+    async getOrCreatePlayer(name: string) {
+        const existentUser = await User.findOne({ where: { name }, limit: 1 });
+        if (existentUser) return existentUser.dataValues;
+
         const cretedUser = await User.create({
             name
         });

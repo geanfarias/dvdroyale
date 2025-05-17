@@ -11,15 +11,18 @@ PlayerRouter.get(`${BASE_URL}/`, (req, res) => {
 })
 
 PlayerRouter.post(BASE_URL, async (req, res) => {
-    const { name } = { ...req.body };
-    console.log(req.body)
-    console.log(name)
+    try {
+        const { name } = { ...req.body };
 
-    if (name == null || name == '') {
-        res.status(400).send('name is required');
-    } else {
-        const createdUser = await controller.createPlayer(name);
-        res.json(createdUser);
+        if (name == null || name == '') {
+            res.status(400).send('name is required');
+        } else {
+            const createdUser = await controller.getOrCreatePlayer(name);
+            res.cookie('uuid', createdUser.uuid).json(createdUser);
+        }
+    } catch (e) {
+        console.debug(e);
+        res.status(500).send("Ocorreu um erro, tente novamente")
     }
 });
 

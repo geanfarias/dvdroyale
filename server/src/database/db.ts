@@ -1,7 +1,7 @@
-import { DataTypes, Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize';
 
 const db = new Sequelize('sqlite://./db/database.db');
 
-db.sync({ force: true })
+db.sync({ force: false })
 
 export default db;

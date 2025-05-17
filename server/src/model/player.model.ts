@@ -1,10 +1,11 @@
-import db from "./db";
+import db from "../database/db";
 import { DataTypes } from "sequelize";
 
-export default db.define('Player', {
+const PlayerModel = db.define('Player', {
     uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
     },
     name: {
         type: DataTypes.STRING,
@@ -12,3 +13,5 @@ export default db.define('Player', {
         unique: true,
     },
 })
+
+export default PlayerModel
