@@ -33,36 +33,30 @@ export default class Game {
     }
 
     runPlayer(player: Player) {
-        // Convert direction from degrees to radians for calculations
         const directionInRadians = player.direction * (Math.PI / 180);
 
-        // Update position based on direction and speed
         player.position.w += Math.cos(directionInRadians) * player.speed;
         player.position.h += Math.sin(directionInRadians) * player.speed;
 
-        // Check for wall collisions and reflect direction
-        // Left or right wall collision
-        if (player.position.w <= 0 || player.position.w >= this.size.w) {
-            // Reflect horizontally: new_direction = 180 - direction
+        const minW = player.size.w / 2;
+        const maxW = this.size.w - (player.size.w / 2);
+        const minH = player.size.h / 2;
+        const maxH = this.size.h - (player.size.h / 2);
+
+        const onWidth = player.position.w <= minW || player.position.w >= maxW;
+        const onHeight = player.position.h <= minH || player.position.h >= maxH;
+        if (onWidth) {
             player.direction = 180 - player.direction;
-            // Ensure player stays within bounds
-            player.position.w = Math.max(0, Math.min(this.size.w, player.position.w));
+            player.position.w = Math.max(0, Math.min(maxW, player.position.w));
         }
-
-        // Top or bottom wall collision
-        if (player.position.h <= 0 || player.position.h >= this.size.h) {
-            // Reflect vertically: new_direction = 360 - direction
+        if (onHeight) {
             player.direction = 360 - player.direction;
-            // Ensure player stays within bounds
-            player.position.h = Math.max(0, Math.min(this.size.h, player.position.h));
+            player.position.h = Math.max(0, Math.min(maxH, player.position.h));
         }
 
-        // Normalize direction to keep it within [0, 360) degrees
         player.direction = player.direction % 360;
         if (player.direction < 0) {
             player.direction += 360;
         }
-
-        console.log(player.position);
     }
 }
