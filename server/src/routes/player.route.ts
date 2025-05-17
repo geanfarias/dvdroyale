@@ -18,8 +18,8 @@ PlayerRouter.post(BASE_URL, async (req, res) => {
     if (name == null || name == '') {
         res.status(400).send('name is required');
     } else {
-        await controller.createPlayer(name);
-        res.send('testing');
+        const createdUser = await controller.createPlayer(name);
+        res.json(createdUser);
     }
 });
 

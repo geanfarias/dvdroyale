@@ -1,10 +1,18 @@
-import user from "../database/user";
+import User from "../database/user";
 
 export default class PlayerController {
-    async createPlayer(name: String) {
-        const cretedUser = await user.create({
+    async createPlayer(name: string) {
+        const cretedUser = await User.create({
             name
         });
         return cretedUser.dataValues;
+    }
+
+    async getPlayer(uuid: string) {
+        const fetchedUser = await User.findByPk(uuid);
+        if (fetchedUser) {
+            return fetchedUser.dataValues;
+        }
+        return null;
     }
 }
