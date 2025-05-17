@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <icon rel="icon" href="" type="image/x-icon" />
+  <title>DVD Royale</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+  <div class="container h-screen">
+    <div class="container">
+      <div class="dvd-logo">DVD</div>
+    </div>
+    <div class="flex justify-center items-center h-screen">
+      <div class="ranking-container p-8 w-full max-w-md mx-4">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold dvd-text text-white">Ranking DVD Royale</h1>
+          <p class="text-gray-400 mt-2">Verifique a sua Pontuação</p>
+        </div>
+        <div class="bg-black p-6 rounded-lg w-full max-w-md mx-auto border border-gray-700">
+          <h2 class="text-white font-bold text-xl mb-4 text-center font-mono">RANKING</h2>
+          <div class="flex items-end justify-center space-x-4 mb-6">
+
+            <div class="flex flex-col items-center space-y-1">
+              <div class="player-skin bg-blue-400">DVD</div>
+              <span class="text-sm text-gray-300 font-mono mt-1">#2 Carlos</span>
+              <span class="text-xs text-gray-500 font-mono">950 pts</span>
+            </div>
+
+            <div class="player-one flex flex-col items-center space-y-1">
+              <div class="player-skin bg-green-400">DVD</div>
+              <span class="text-sm text-white font-mono mt-1">#1 Jose</span>
+              <span class="text-xs text-gray-400 font-mono">1000 pts</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-1">
+              <div class="player-skin bg-red-400">DVD</div>
+              <span class="text-sm text-white font-mono mt-1">#3 Jose</span>
+              <span class="text-xs text-gray-400 font-mono">1000 pts</span>
+            </div>
+          </div>
+          <ul class="space-y-1 font-mono text-white text-base">
+            <li class="flex justify-between border-b border-gray-600 pb-1">
+              <span>#5 PlayerJose</span>
+              <span class="text-gray-400">1000 pts</span>
+            </li>
+            <li class="flex justify-between border-b border-gray-600 pb-1">
+              <span>#4 PlayerCarlos</span>
+              <span class="text-gray-400">950 pts</span>
+            </li>
+            <li class="flex justify-between border-b border-gray-600 pb-1">
+              <span>#6 PlayerRicardo</span>
+              <span class="text-gray-400">900 pts</span>
+            </li>
+          </ul>
+        </div>
+        <div class="align-items-center flex justify-center">
+          <button class="button w-full py-3 rounded-lg text-blue-400 font-bold mt-6">Jogar Novamente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,9 +1,5 @@
 const logo = document.querySelector(".dvd-logo");
 const container = document.querySelector(".container");
-// const speedSlider = document.getElementById("speedSlider");
-// const speedValue = document.getElementById("speedValue");
-// const controls = document.getElementById("controls");
-// const toggleControls = document.getElementById("toggleControls");
 
 // Definir posição inicial aleatória
 let posX = Math.random() * (window.innerWidth - 200);
@@ -22,28 +18,7 @@ function changeColor() {
   logo.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
   logo.style.color = `rgb(${255 - r}, ${255 - g}, ${255 - b})`;
 }
-
-// Definir cor inicial
 changeColor();
-
-// Atualizar velocidade baseado no slider
-// speedSlider.addEventListener("input", function () {
-//   baseSpeed = parseFloat(this.value);
-//   speedValue.textContent = baseSpeed.toFixed(1);
-
-//   // Manter a direção mas ajustar a magnitude
-//   speedX = Math.sign(speedX) * baseSpeed;
-//   speedY = Math.sign(speedY) * baseSpeed;
-// });
-// Toggle para mostrar/esconder controles
-// toggleControls.addEventListener("click", function () {
-//   controls.classList.toggle("hidden");
-// });
-
-// Esconder controles após 5 segundos inicialmente
-// setTimeout(() => {
-//   controls.classList.add("hidden");
-// }, 5000);
 
 // Ajustar o logo à janela
 window.addEventListener("resize", function () {

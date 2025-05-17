@@ -1,0 +1,96 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #000;
+  width: 100vw;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.button {
+  background: linear-gradient(to bottom, #444, #222);
+  border: 2px solid #555;
+  font-size: 1.3rem;
+  transition: all 0.3s;
+  padding: 10px;
+  margin: 10px;
+}
+
+.button:hover {
+  background: linear-gradient(to bottom, #555, #333);
+  box-shadow: 0 0 5px rgba(191, 168, 255, 0.5);
+  transform: scale(1.02);
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+}
+
+.container-sala {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  border: 2px solid #444;
+  border-radius: 15px;
+  display: flex;
+}
+
+.dvd-logo {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 48px;
+  border-radius: 80%;
+  user-select: none;
+  color: white;
+}
+
+label {
+  color: white;
+  margin-right: 10px;
+  font-size: 14px;
+  min-width: 60px;
+}
+
+.hidden {
+  display: none;
+}
+
+label {
+  color: white;
+  margin-right: 10px;
+  font-size: 14px;
+  min-width: 60px;
+}
+
+.sala-container {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid #444;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+.container-sala {
+  display: flex;
+}
+
+.entrar-sala,
+.criar-sala {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  margin: 10px;
+  justify-content: center;
+  align-items: center;
+}

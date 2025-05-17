@@ -1,0 +1,128 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #000;
+  width: 100vw;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.main-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: auto;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  padding: 2rem;
+  width: 100%;
+  max-width: 28rem;
+  margin: 1rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid #444;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.text-center {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dvd-text {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: white;
+}
+
+.subtext {
+  color: #9ca3af;
+  margin-top: 0.5rem;
+}
+
+.form-space {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.input-label {
+  display: block;
+  color: #d1d5db;
+  margin-bottom: 0.5rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #111;
+  border: 2px solid #444;
+  color: #fff;
+  font-family: "VT323", monospace;
+  font-size: 1.2rem;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  margin: 0;
+  display: block;
+}
+
+.input-field:focus {
+  border-color: rgba(191, 168, 255, 0.5);
+  box-shadow: 0 0 10px rgba(191, 168, 255, 0.5);
+  outline: none;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.75rem 0;
+  border-radius: 0.5rem;
+  color: #60a5fa;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  background: linear-gradient(to bottom, #444, #222);
+  border: 2px solid #555;
+  font-family: "VT323", monospace;
+  font-size: 1.3rem;
+  transition: all 0.3s;
+  text-shadow: 0 0 2px rgba(191, 168, 255, 0.5);
+}
+
+.login-btn:hover {
+  background: linear-gradient(to bottom, #555, #333);
+  box-shadow: 0 0 5px rgba(191, 168, 255, 0.5);
+  transform: scale(1.02);
+}
+
+.dvd-logo {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 48px;
+  border-radius: 80%;
+  user-select: none;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+input[type="range"] {
+  width: 200px;
+  margin: 0 10px;
+}
