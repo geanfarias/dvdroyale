@@ -5,7 +5,6 @@ import Game from "./websocket/game";
 import Player from "./websocket/player";
 import http from 'http';
 import { Server } from 'socket.io';
-import {Socket} from "socket.io/dist/socket";
 
 const app = express()
 const port = 3000
@@ -17,18 +16,10 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 const game = new Game();
-const sockets: Socket[] = []
 
 app.get('/start', (req, res) => {
   res.send('start game!')
-  sockets.forEach(socket => {
-    socket.emit('gameStart', game.getPlayers());
-  });
-  game.startGame((players) => {
-    sockets.forEach(socket => {
-      socket.emit('gameUpdate', players);
-    });
-  });
+  game.startGame();
 })
 
 // WebSocket connection handling
@@ -36,19 +27,12 @@ io.on('connection', (socket) => {
   console.log('a user connected');
 
   // Create a new player when a user connects
-  const player = new Player("Player_" + socket.id.substring(0, 5), socket.id);
+  const player = new Player("Player_" + socket.id.substring(0, 5), socket.id, socket);
   game.addPlayer(player);
-  sockets.push(socket);
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
-    game.desconectPlayer(player);
-
-
-    const socketIndex = sockets.indexOf(socket);
-    if (socketIndex !== -1) {
-      sockets.splice(socketIndex, 1);
-    }
+    game.disconnectPlayer(player);
   });
 });
 
