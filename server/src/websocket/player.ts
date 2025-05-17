@@ -10,8 +10,11 @@ export default class Player {
         h: 100,
     };
     direction: number = 45;
-    speed: number = 15;
+    speed: number = 5;
     readonly socket: Socket;
+    hitCorner: boolean = false;
+    hitWall: boolean = false;
+    points: number = 0;
 
     constructor(name: string, uuid: string, socket: Socket) {
         this.name = name;

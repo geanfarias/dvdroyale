@@ -2,6 +2,7 @@ import Player from "./player";
 import Size from "./size";
 
 export default class Game {
+    private readonly pointsBase = 1
     private readonly size: Size = { w: 640, h: 480 }
 
     readonly players: Player[] = [];
@@ -25,6 +26,13 @@ export default class Game {
 
     startGame() {
         console.log(this.players)
+        const playerData = this.players.map(player => ({
+            id: player.uuid,
+            position: player.position,
+        }));
+        this.players.forEach(player => {
+            player.socket.emit('gameStart', playerData);
+        });
         setInterval(() => this.updateGame(), 100);
     }
 
@@ -33,6 +41,9 @@ export default class Game {
         const playerData = this.players.map(player => ({
             id: player.uuid,
             position: player.position,
+            hitWall: player.hitWall,
+            hitCorner: player.hitCorner,
+            points: player.points,
         }));
         this.players.forEach(player => {
             player.socket.emit('gameUpdate', playerData);
@@ -45,10 +56,10 @@ export default class Game {
         player.position.w += Math.cos(directionInRadians) * player.speed;
         player.position.h += Math.sin(directionInRadians) * player.speed;
 
-        const minW = player.size.w / 2;
-        const maxW = this.size.w - (player.size.w / 2);
-        const minH = player.size.h / 2;
-        const maxH = this.size.h - (player.size.h / 2);
+        const minW = 0;
+        const maxW = this.size.w - player.size.w;
+        const minH = 0;
+        const maxH = this.size.h - player.size.h;
 
         const onWidth = player.position.w <= minW || player.position.w >= maxW;
         const onHeight = player.position.h <= minH || player.position.h >= maxH;
@@ -59,6 +70,13 @@ export default class Game {
         if (onHeight) {
             player.direction = 360 - player.direction;
             player.position.h = Math.max(0, Math.min(maxH, player.position.h));
+        }
+        player.hitWall = onWidth || onHeight;
+        player.hitCorner = onWidth && onHeight;
+        if (player.hitCorner) {
+            player.points += this.pointsBase*10
+        } else if (player.hitWall) {
+            player.points += this.pointsBase*1
         }
 
         player.direction = player.direction % 360;
