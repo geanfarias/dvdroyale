@@ -1,0 +1,131 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: white;
+  width: 100dvw;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  position: relative;
+  width: 640px;
+  height: 480px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  background-color: black;
+}
+
+.dvd-logo {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  /* font-size: 48px; */
+  border-radius: 80%;
+  user-select: none;
+  color: white;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+label {
+  color: white;
+  margin-right: 10px;
+  font-size: 14px;
+  min-width: 60px;
+}
+
+input[type="range"] {
+  width: 200px;
+  margin: 0 10px;
+}
+
+.speed-value {
+  color: white;
+  font-size: 14px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.toggle-controls {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-controls:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.hidden {
+  display: none;
+}
+
+
+/* toast.css */
+#toast {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: rgba(255, 80, 80, 0.9);
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  padding: 16px 24px;
+  position: fixed;
+  z-index: 1000;
+  right: 30px;
+  bottom: 30px;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(20px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  white-space: pre-line;
+}
+
+#toast.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
