@@ -21,6 +21,9 @@ const sockets: Socket[] = []
 
 app.get('/start', (req, res) => {
   res.send('start game!')
+  sockets.forEach(socket => {
+    socket.emit('gameStart', game.getPlayers());
+  });
   game.startGame((players) => {
     sockets.forEach(socket => {
       socket.emit('gameUpdate', players);

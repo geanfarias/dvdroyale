@@ -19,6 +19,10 @@ export default class Game {
         }
     }
 
+    getPlayers() {
+        return this.players;
+    }
+
     startGame(callback?: (players: Player[]) => void) {
         console.log(this.players)
         this.updateGame(callback)
