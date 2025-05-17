@@ -3,6 +3,7 @@ import Size from "./size";
 import _ from 'lodash';
 
 export default class Game {
+    private started = false;
     private readonly size: Size = { w: 640, h: 480 }
 
     readonly players: Player[] = [];
@@ -21,7 +22,9 @@ export default class Game {
     }
 
     startGame() {
+        if (this.started) return
         console.log(this.players)
+        this.started = true;
         setInterval(() => this.updateGame(), 100);
     }
 
