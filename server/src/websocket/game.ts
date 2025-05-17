@@ -1,10 +1,11 @@
 import Player from "./player";
 import Size from "./size";
+import _ from 'lodash';
 
 export default class Game {
-    private readonly size: Size = {w: 640, h: 480}
+    private readonly size: Size = { w: 640, h: 480 }
 
-    private readonly players: Player[] = [];
+    readonly players: Player[] = [];
 
     addPlayer(player: Player) {
         player.position.w = Math.floor(Math.random() * this.size.w);
@@ -12,24 +13,27 @@ export default class Game {
         this.players.push(player);
     }
 
-    desconectPlayer(player: Player) {
+    disconnectPlayer(player: Player) {
         const playerIndex = this.players.findIndex(p => p == player);
         if (playerIndex !== -1) {
             this.players.splice(playerIndex, 1);
         }
     }
 
-    startGame(callback?: (players: Player[]) => void) {
+    startGame() {
         console.log(this.players)
-        this.updateGame(callback)
+        setInterval(() => this.updateGame(), 100);
     }
 
-    updateGame(callback?:(players: Player[]) => void) {
+    updateGame() {
         this.players.forEach(player => this.runPlayer(player));
-        if (callback) {
-            callback(this.players);
-        }
-        setTimeout(() => this.updateGame(callback), 100);
+        const playerData = this.players.map(player => ({
+            id: player.uuid,
+            position: player.position,
+        }));
+        this.players.forEach(player => {
+            player.socket.emit('gameUpdate', playerData);
+        });
     }
 
     runPlayer(player: Player) {
