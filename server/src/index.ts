@@ -5,6 +5,7 @@ import Game from "./websocket/game";
 import Player from "./websocket/player";
 import http from 'http';
 import { Server } from 'socket.io';
+import SocketRoom from './websocket/SocketRoom';
 
 const app = express()
 const port = 3000
@@ -15,20 +16,40 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 
-const game = new Game();
-
-app.get('/start', (req, res) => {
-  res.send('start game!')
-  game.startGame();
-})
+const activeRooms: { [roomId: string]: SocketRoom } = {};
 
 // WebSocket connection handling
 io.on('connection', (socket) => {
   console.log('a user connected');
+  const roomId = socket.handshake.query.room as string | null;
+  console.log('roomId:', roomId);
+  if (roomId == null || roomId == '') {
+    return socket.disconnect();
+  }
 
-  // Create a new player when a user connects
   const player = new Player("Player_" + socket.id.substring(0, 5), socket.id, socket);
+
+  let socketGame = activeRooms[roomId];
+  let game: Game;
+  console.log('socketGame first:', socketGame);
+
+  if (socketGame == null) {
+    game = new Game();
+    socketGame = new SocketRoom(game);
+    activeRooms[roomId] = socketGame;
+  } else {
+    game = socketGame.game;
+  }
+
   game.addPlayer(player);
+
+  console.log('game after:', game);
+  console.log('socketGame after:', socketGame);
+
+  socket.on('startGame', () => {
+    console.log('calling startGame');
+    game.startGame();
+  })
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
