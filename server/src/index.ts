@@ -14,7 +14,7 @@ const io = new Server(server);
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static('public'));
+app.use(express.static('../front/public'));
 
 const activeRooms: { [roomId: string]: SocketRoom } = {};
 

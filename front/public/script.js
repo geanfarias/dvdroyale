@@ -197,7 +197,11 @@ document.addEventListener("click", function () {
   );
 });
 
-const socket = io();
+const socket = io('', {
+  query: {
+      "room": "padrao"
+  }
+});
 socket.on("gameStart", (gameState) => {
     console.log("Game state received:", gameState);
     updateLogoCount(gameState);
@@ -230,3 +234,10 @@ socket.on("connect", () => {
 socket.on("disconnect", () => {
   console.log("Disconnected from server");
 });
+
+function start() {
+  // Inicializar o jogo
+  socket.emit("startGame");
+}
+
+document.getElementById("startButton").addEventListener("click", start);
