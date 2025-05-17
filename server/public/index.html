@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game WebSocket Test</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        #game-container {
+            width: 640px;
+            height: 480px;
+            border: 1px solid black;
+            position: relative;
+        }
+        .player {
+            position: absolute;
+            background-color: red;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <h1>Game WebSocket Test</h1>
+    <div id="game-container"></div>
+    <pre id="game-data"></pre>
+
+    <script>
+        const socket = io();
+        const gameContainer = document.getElementById('game-container');
+        const gameData = document.getElementById('game-data');
+        
+        // Handle game updates from the server
+        socket.on('gameUpdate', (players) => {
+            // Display the raw data
+            gameData.textContent = JSON.stringify(players, null, 2);
+            
+            // Clear the container
+            gameContainer.innerHTML = '';
+            
+            // Render each player
+            players.forEach(player => {
+                const playerElement = document.createElement('div');
+                playerElement.className = 'player';
+                playerElement.style.width = '10px';
+                playerElement.style.height = '10px';
+                playerElement.style.left = player.position.w + 'px';
+                playerElement.style.top = player.position.h + 'px';
+                playerElement.title = player.name;
+                
+                gameContainer.appendChild(playerElement);
+            });
+        });
+        
+        // Log connection status
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+        
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+    </script>
+</body>
+</html>
