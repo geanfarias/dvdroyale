@@ -1,4 +1,6 @@
 const container = document.querySelector(".container");
+const ranking = document.querySelector(".ranking");
+const rankingTemplate = document.querySelector(".js-dvd-template");
 let logos = [];
 
 class DvdLogo {
@@ -85,20 +87,28 @@ const socket = io("", {
   },
 });
 
-socket.on("gameStart", (users) => {
-  const userLength = Object.keys(users).length;
+function setPlayers(players) {
+    const userLength = Object.keys(players).length;
 
-  for (let i = 0; i < userLength; i++) {
-    const user = users[i];
-    logos.push(createLogo(user));
-  }
+    for (let i = 0; i < userLength; i++) {
+      const player = players[i];
+      logos.push(createLogo(player));
+    }
+}
+
+socket.on("gameStart", (players) => {
+  setPlayers(players);
 });
 
 socket.on("gameUpdate", (players) => {
-  players.forEach((player) => {
-    const logo = logos.find((logo) => logo.user.id === player.id);
+    if (logos.length === 0) {
+        setPlayers(players);
+    }
 
-    if (!logo) return;
+  players.forEach((player) => {
+        const logo = logos.find((logo) => logo.user.id === player.id);
+
+        if (!logo) return;
 
     // console.log(player);
 
@@ -108,11 +118,29 @@ socket.on("gameUpdate", (players) => {
     //     element.style.transform = "scale(1)";
     //   }, 1000);
     // }
-    requestAnimationFrame(() => {
-        logo.update(player);
+        requestAnimationFrame(() => {
+            logo.update(player);
+        });
     });
-  });
+    
+    updateRanking(players);
 });
+
+function updateRanking(players) {
+    console.log(players);
+    const userLength = Object.keys(players).length;
+
+    ranking.innerHTML = "";
+
+    for (let i = 0; i < userLength; i++) {
+        const player = players[i];
+        const template = rankingTemplate.content.cloneNode(true);
+        template.querySelector(".js-name").textContent = player.name;
+        template.querySelector(".js-score").textContent = player.points;
+
+        ranking.appendChild(template);
+    }
+};
 
 socket.on("connect", () => {
   console.log("Connected to server");
