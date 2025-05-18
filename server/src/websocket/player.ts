@@ -17,7 +17,7 @@ export default class Player {
     hitWall: boolean = false;
     points: number = 0;
     unnecessaryClicks: number = 0;
-    
+
     constructor(name: string, uuid: string, socket: Socket) {
         this.name = name;
         this.uuid = uuid;
@@ -27,6 +27,7 @@ export default class Player {
     toSerializable() {
         return {
             id: this.uuid,
+            name: this.name,
             position: this.position,
             hitWall: this.hitWall,
             hitCorner: this.hitCorner,

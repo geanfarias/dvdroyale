@@ -19,19 +19,19 @@
 
 ## Descrição
 
-O DVD Royale simula a famosa animação do logo de DVD quicando pelas bordas da tela, mas com um diferencial: cada jogador controla seu próprio logo em tempo real, competindo por pontos ao bater nas paredes e cantos. O sistema utiliza WebSockets para comunicação em tempo real entre os jogadores e o servidor.
+O DVD Royale simula a famosa animação do logo de DVD quicando pelas bordas da tela, mas com um diferencial: cada jogador é representado por uma logo em tempo real, competindo por pontos, ao bater nas paredes recebe 1 ponto e ao bater nas quinas recebe 10, e ganha um bonus de velocidade durante 5s e o dobro de pontos. O sistema utiliza WebSockets para comunicação em tempo real entre os jogadores e o servidor.
 
 ---
 
 ## Funcionalidades
 
-- **Animação fiel** ao screensaver de DVD, com colisão nas bordas e mudança de cor.
-- **Multiplayer em tempo real**: cada jogador possui seu próprio logo na sala.
-- **Sistema de salas**: crie ou entre em salas para jogar com amigos.
-- **Pontuação**: ganhe pontos ao bater nas paredes e ainda mais ao acertar os cantos.
-- **Ranking**: acompanhe a pontuação dos jogadores.
-- **Interface intuitiva** e responsiva.
-- **Toasts** e feedbacks visuais para ações especiais.
+- **Animação fiel**: Ao screensaver de DVD, com colisão nas bordas e mudança de cor.
+- **Multiplayer em tempo real**: Cada jogador possui seu próprio logo na sala.
+- **Sistema de salas**: Crie ou entre em salas para jogar com amigos.
+- **Pontuação**: Ganhe pontos ao bater nas paredes e ainda mais ao acertar os cantos.
+- **Ranking**: Acompanhe a pontuação dos jogadores.
+- **Interface**: Intuitiva e responsiva.
+- **Toasts**: Feedbacks visuais para ações especiais.
 
 ---
 
@@ -74,20 +74,13 @@ cd ../front
 npm install
 ```
 
-4. **Compile o back-end:**
-
-```bash
-cd ../server
-npm run build
-```
-
-5. **Inicie o servidor:**
+4. **Inicie o servidor:**
 
 ```bash
 npm start
 ```
 
-6. **Acesse o front-end:**
+5. **Acesse o front-end:**
    Abra front/index.html ou acesse via navegador em http://localhost:3000 (dependendo da configuração do servidor).
 
 ### Estrutura de Pastas
@@ -133,7 +126,4 @@ Abra um Pull Request
 
 ### Licença
 
-Este projeto é licenciado sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
-
-Feito com nostalgia e criatividade para o Hackathon de Ideias Inúteis.
-Sinta-se à vontade para personalizar o texto conforme desejar!
+Este projeto é licenciado sob a licença MIT.
