@@ -47,8 +47,10 @@ export default class Game {
             hitWall: player.hitWall,
             hitCorner: player.hitCorner,
             points: player.points,
+            currentPlayer: false,
         }));
         this.players.forEach(player => {
+            playerData.forEach(p => {p.currentPlayer = p.id == player.uuid})
             player.socket.emit('gameUpdate', playerData);
         });
     }
