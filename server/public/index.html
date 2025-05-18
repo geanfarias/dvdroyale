@@ -35,7 +35,7 @@
         const roomId = urlParams.get('room')
 
         if (roomId == null || roomId == '') {
-            window.location.href = '/404';
+            window.location.href = '/login';
         }
 
         const socket = io('', {
@@ -75,6 +75,10 @@
 
         socket.on('disconnect', () => {
             console.log('Disconnected from server');
+        });
+
+        socket.on('invalidRoom', () => {
+            window.location.href = '/login';
         });
     </script>
 </body>

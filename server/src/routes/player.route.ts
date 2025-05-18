@@ -18,7 +18,7 @@ PlayerRouter.post(BASE_URL, async (req, res) => {
             res.status(400).send('name is required');
         } else {
             const createdUser = await controller.getOrCreatePlayer(name);
-            res.cookie('uuid', createdUser.uuid).json(createdUser);
+            res.cookie('uuid', createdUser.uuid).redirect('/salas');
         }
     } catch (e) {
         console.debug(e);

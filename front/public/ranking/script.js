@@ -1,15 +1,11 @@
 const logo = document.querySelector(".dvd-logo");
 const container = document.querySelector(".container");
-const speedSlider = document.getElementById("speedSlider");
-const speedValue = document.getElementById("speedValue");
-const controls = document.getElementById("controls");
-const toggleControls = document.getElementById("toggleControls");
 
 // Definir posição inicial aleatória
 let posX = Math.random() * (window.innerWidth - 200);
 let posY = Math.random() * (window.innerHeight - 100);
 
-// Definir velocidade
+// Definir velocidades
 let baseSpeed = 2;
 let speedX = baseSpeed;
 let speedY = baseSpeed;
@@ -20,31 +16,9 @@ function changeColor() {
   const g = Math.floor(Math.random() * 256);
   const b = Math.floor(Math.random() * 256);
   logo.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-//   logo.style.color = `rgb(${255 - r}, ${255 - g}, ${255 - b})`;
+  logo.style.color = `rgb(${255 - r}, ${255 - g}, ${255 - b})`;
 }
-
-// Definir cor inicial
 changeColor();
-
-// Atualizar velocidade baseado no slider
-speedSlider.addEventListener("input", function () {
-  baseSpeed = parseFloat(this.value);
-  speedValue.textContent = baseSpeed.toFixed(1);
-
-  // Manter a direção mas ajustar a magnitude
-  speedX = Math.sign(speedX) * baseSpeed;
-  speedY = Math.sign(speedY) * baseSpeed;
-});
-
-// Toggle para mostrar/esconder controles
-toggleControls.addEventListener("click", function () {
-  controls.classList.toggle("hidden");
-});
-
-// Esconder controles após 5 segundos inicialmente
-setTimeout(() => {
-  controls.classList.add("hidden");
-}, 5000);
 
 // Ajustar o logo à janela
 window.addEventListener("resize", function () {
@@ -101,3 +75,57 @@ function animate() {
 
 // Iniciar animação
 animate();
+
+const urlString = window.location.search;
+const urlParams = new URLSearchParams(urlString);
+
+const roomId = urlParams.get('room')
+
+if (roomId == null || roomId == '') {
+  window.location.href = '/login';
+}
+
+const topRankingSelectors = {
+  0: 'first',
+  1: 'second',
+  2: 'third',
+}
+
+fetch(
+  `/room_ranking/${roomId}`,
+  { method: 'GET' }
+)
+  .then(response => response.json())
+  .then(rankingData => {
+    const rankings = [];
+
+    rankingData.forEach((ranking) => {
+      rankings.push({
+        points: ranking.points,
+        playerName: ranking.playerDetails.name,
+      });
+    });
+
+    rankings.sort((a, b) => b.points - a.points);
+
+    const rankingList = document.querySelector('.ranking-list');
+
+    rankings.forEach((ranking, index) => {
+      // Top ranking
+      if (index < 4) {
+        const playerCard = document.querySelector(`.player-card.player-${topRankingSelectors[index]}`);
+        playerCard.querySelector('.player-name').textContent = `#${index + 1} ${ranking.playerName}`;
+        playerCard.querySelector('.player-points').textContent = `${ranking.points} pts`;
+        playerCard.style.display = 'flex';
+      } else {
+        const liElem = document.createElement('li');
+        liElem.classList.add('ranking-item');
+        liElem.innerHTML = `
+          <span>#${index + 1} ${ranking.playerName}</span>
+          <span>${ranking.points} pts</span>
+        `;
+        rankingList.appendChild(liElem);
+      }
+    })
+  })
+  .catch(error => console.log('error', error));
