@@ -8,6 +8,8 @@ body {
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
+  background-color: black;
+  gap: 10px;
 }
 
 .container {
