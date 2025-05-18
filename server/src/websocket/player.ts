@@ -21,4 +21,15 @@ export default class Player {
         this.uuid = uuid;
         this.socket = socket;
     }
+
+    toSerializable() {
+        return {
+            id: this.uuid,
+            position: this.position,
+            hitWall: this.hitWall,
+            hitCorner: this.hitCorner,
+            points: this.points,
+            currentPlayer: false,
+        }
+    }
 }

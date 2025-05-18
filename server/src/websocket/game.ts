@@ -18,7 +18,8 @@ export default class Game {
     disconnectPlayer(player: Player) {
         const playerIndex = this.players.findIndex(p => p == player);
         if (playerIndex !== -1) {
-            this.players.splice(playerIndex, 1);
+            const playerDisconnected = this.players.splice(playerIndex, 1)[0];
+            this.players.forEach(player => player.socket.emit("playerDisconnected", playerDisconnected.toSerializable()))
         }
     }
 
@@ -42,14 +43,7 @@ export default class Game {
 
     updateGame() {
         this.players.forEach(player => this.runPlayer(player));
-        const playerData = this.players.map(player => ({
-            id: player.uuid,
-            position: player.position,
-            hitWall: player.hitWall,
-            hitCorner: player.hitCorner,
-            points: player.points,
-            currentPlayer: false,
-        }));
+        const playerData = this.players.map(player => player.toSerializable());
         this.players.forEach(player => {
             playerData.forEach(p => {p.currentPlayer = p.id == player.uuid})
             player.socket.emit('gameUpdate', playerData);
