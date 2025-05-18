@@ -84,6 +84,13 @@ export default class Game {
             player.direction += 360;
         }
     }
+
+    toast(player: Player){
+        player.unnecessaryClicks++;
+        if (player.unnecessaryClicks == 1){
+            player.socket.emit('toast', {message: "Unnecessary click!"});
+        }
+    }
 }
 
 function newDitection(direction:number, base:number):number {

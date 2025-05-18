@@ -15,7 +15,8 @@ export default class Player {
     hitCorner: boolean = false;
     hitWall: boolean = false;
     points: number = 0;
-
+    unnecessaryClicks: number = 0;
+    
     constructor(name: string, uuid: string, socket: Socket) {
         this.name = name;
         this.uuid = uuid;

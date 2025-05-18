@@ -55,6 +55,12 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
     game.disconnectPlayer(player);
   });
+  
+  socket.on('clickEvent', () =>{
+    game.toast(player);
+  })
+
+
 });
 
 server.listen(port, () => {
