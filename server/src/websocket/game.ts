@@ -1,15 +1,16 @@
 import Player from "./player";
 import Size from "./size";
+import { v4 as uuidv4 } from 'uuid';
 
 export default class Game {
     private readonly pointsBase = 1
     private started = false;
     private readonly size: Size = { w: 640, h: 480 }
-    private readonly basePlayerSpeed = 5;
     readonly players: Player[] = [];
+    private readonly chanceSurprise = 0.1;
+    private readonly surprises:string[] = [];
 
     addPlayer(player: Player) {
-        player.speed = this.basePlayerSpeed;
         player.position.w = Math.floor(Math.random() * this.size.w);
         player.position.h = Math.floor(Math.random() * this.size.h);
         player.direction = randomDirection();
@@ -39,6 +40,9 @@ export default class Game {
     }
 
     updateGame() {
+        if (Math.random() < this.chanceSurprise) {
+            this.addSurprise();
+        }
         this.players.forEach(player => this.runPlayer(player));
         const playerData = this.players.map(player => player.toSerializable());
         this.players.forEach(player => {
@@ -89,7 +93,50 @@ export default class Game {
             player.socket.emit('toast', {message: "Unnecessary click!"});
         }
     }
+
+    addSurprise() {
+        const surprise = {
+            id: uuidv4(),
+            position: {
+                w: Math.floor(Math.random() * this.size.w),
+                h: Math.floor(Math.random() * this.size.h),
+            },
+        }
+        this.surprises.push(surprise.id);
+        this.players.forEach(player => {
+            player.socket.emit('surprise', surprise);
+        });
+    }
+
+    executeSurprise(player: Player, surpriseId: string) {
+        const surpriseIndex = this.surprises.findIndex(s => s == surpriseId);
+        if (surpriseIndex !== -1) {
+            this.surprises.splice(surpriseIndex, 1);
+            if (randomizeHappySuprise()) {
+                player.socket.emit('toast', {message: "Happy surprise!"});
+                player.points += this.pointsBase*5;
+                player.socket.emit('toast', {message: "Surprise!"});
+                this.players.forEach(p => {
+                    p.socket.emit('surpriseExecuted', surpriseId);
+                });
+            } else {
+                player.socket.emit('toast', {message: "Sad surprise!"});
+                player.speed = 0
+                setTimeout(() => {
+                    player.speed = 5;
+                }, 5000);
+                this.players.forEach(p => {
+                    p.socket.emit('surpriseExecuted', surpriseId);
+                });
+            }
+        }
+    }
 }
+
+const happyPercent = 0.5;
+function randomizeHappySuprise() {
+    return Math.random() < happyPercent;
+}	
 
 function newDitection(direction:number, base:number):number {
     return randomizeAround(base - direction)
