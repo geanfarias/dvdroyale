@@ -1,23 +1,44 @@
+import RoomController from "../controller/room.controller";
+import RoomRankingController from "../controller/room_ranking.controller";
 import Player from "./player";
 import Size from "./size";
 import { v4 as uuidv4 } from 'uuid';
 
+const roomRankingController = new RoomRankingController();
+const roomController = new RoomController();
+
 export default class Game {
     private readonly pointsBase = 1
-    private started = false;
+    started = false;
     private readonly size: Size = { w: 640, h: 480 }
     readonly players: Player[] = [];
     private readonly chanceSurprise = 0.1;
     private readonly surprises:string[] = [];
 
+    private rankingMap: { [uuid: string]: number } = {};
+
+    private readonly roomId: string;
+
+    constructor(room: string) {
+        this.roomId = room;
+    }
+
     addPlayer(player: Player) {
         player.position.w = Math.floor(Math.random() * this.size.w);
         player.position.h = Math.floor(Math.random() * this.size.h);
         player.direction = randomDirection();
-        this.players.push(player);        
+        this.players.push(player);
     }
 
     disconnectPlayer(player: Player) {
+        if ((this.players.length - 1) == 0 && this.started) {
+            console.log("No players left, ending game");
+
+            console.log(this.rankingMap)
+            roomRankingController.save(this.roomId, this.rankingMap);
+            roomController.markAsFinished(this.roomId);
+        }
+
         const playerIndex = this.players.findIndex(p => p == player);
         if (playerIndex !== -1) {
             const playerDisconnected = this.players.splice(playerIndex, 1)[0];
@@ -27,6 +48,10 @@ export default class Game {
 
     startGame() {
         if (this.started) return
+        if (this.players.length < 2) {
+            this.players.forEach(player => player.socket.emit('toast', { message: "Pelo menos 2 jogadores precisam estar na sala!" }));
+            return
+        }
         console.log(this.players)
         const playerData = this.players.map(player => ({
             id: player.uuid,
@@ -46,7 +71,7 @@ export default class Game {
         this.players.forEach(player => this.runPlayer(player));
         const playerData = this.players.map(player => player.toSerializable());
         this.players.forEach(player => {
-            playerData.forEach(p => {p.currentPlayer = p.id == player.uuid})
+            playerData.forEach(p => { p.currentPlayer = p.id == player.uuid })
             player.socket.emit('gameUpdate', playerData);
         });
     }
@@ -78,8 +103,10 @@ export default class Game {
             player.speedBoost(10, 5000);
             player.points += this.pointsBase*10
         } else if (player.hitWall) {
-            player.points += this.pointsBase*1
+            player.points += this.pointsBase * 1
         }
+
+        this.rankingMap[player.uuid] = player.points;
 
         player.direction = player.direction % 360;
         if (player.direction < 0) {
@@ -87,10 +114,10 @@ export default class Game {
         }
     }
 
-    toast(player: Player){
+    toast(player: Player) {
         player.unnecessaryClicks++;
-        if (player.unnecessaryClicks == 1){
-            player.socket.emit('toast', {message: "Unnecessary click!"});
+        if (player.unnecessaryClicks == 1) {
+            player.socket.emit('toast', { message: "Unnecessary click!" });
         }
     }
 
@@ -138,19 +165,19 @@ function randomizeHappySuprise() {
     return Math.random() < happyPercent;
 }	
 
-function newDitection(direction:number, base:number):number {
+function newDitection(direction: number, base: number): number {
     return randomizeAround(base - direction)
 }
 
 const default_margin = 10
 
-function randomizeAround(value:number, range = default_margin) {
-  const offset = Math.floor(Math.random() * (range * 2 + 1)) - range;
-  return value + offset;
+function randomizeAround(value: number, range = default_margin) {
+    const offset = Math.floor(Math.random() * (range * 2 + 1)) - range;
+    return value + offset;
 }
 
 function randomDirection() {
-  const values = [45, 135, 225, 315];
-  const index = Math.floor(Math.random() * values.length);
-  return randomizeAround(values[index]);
+    const values = [45, 135, 225, 315];
+    const index = Math.floor(Math.random() * values.length);
+    return randomizeAround(values[index]);
 }

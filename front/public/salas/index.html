@@ -16,15 +16,15 @@
       <div class="sala-container">
         <div class="sala-header">
           <h1 class="sala-title">Salas DVD Royale</h1>
-          <p class="sala-subtitle">Crie ou Entre em Uma Sala</p>
+          <p class="sala-subtitle">Crie uma Sala e comece a jogar</p>
         </div>
         <div class="sala-options">
-          <div class="sala-option">
+          <!-- <div class="sala-option">
             <button class="sala-button">ENTRAR EM SALA</button>
-          </div>
-          <div class="sala-option">
-            <button class="sala-button">CRIAR NOVA SALA</button>
-          </div>
+          </div> -->
+          <form class="sala-option" method="post" action="/room">
+            <button class="sala-button" type="submit">CRIAR NOVA SALA</button>
+          </form>
         </div>
       </div>
     </div>

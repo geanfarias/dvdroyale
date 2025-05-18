@@ -95,22 +95,22 @@ function createLogo(user) {
   logo.appendChild(img);
   container.appendChild(logo);
 
-//   const x = Math.random() * (containerRect.width - 200);
-//   const y = Math.random() * (containerRect.height - 100);
+  //   const x = Math.random() * (containerRect.width - 200);
+  //   const y = Math.random() * (containerRect.height - 100);
 
   // Velocidade inicial (direção aleatória)
-//   const speedX = (Math.random() > 0.5 ? 1 : -1) * baseSpeed;
-//   const speedY = (Math.random() > 0.5 ? 1 : -1) * baseSpeed;
+  //   const speedX = (Math.random() > 0.5 ? 1 : -1) * baseSpeed;
+  //   const speedY = (Math.random() > 0.5 ? 1 : -1) * baseSpeed;
 
-//   const dvdLogo = new DvdLogo(logo, x, y, speedX, speedY);
-//   dvdLogo.changeColor(); // Definir cor inicial
+  //   const dvdLogo = new DvdLogo(logo, x, y, speedX, speedY);
+  //   dvdLogo.changeColor(); // Definir cor inicial
 
-//   return dvdLogo;
+  //   return dvdLogo;
 }
 
 // Função para atualizar o número de logos
 function updateLogoCount(users) {
-    const userLength = Object.keys(users).length;
+  const userLength = Object.keys(users).length;
 
   // Remover todos os logos atuais
   logos.forEach((logo) => {
@@ -130,28 +130,27 @@ function updateLogoCount(users) {
 }
 
 function changeColor(user) {
-    const element = document.querySelector(`.uuid-${user.id}`);
+  const element = document.querySelector(`.uuid-${user.id}`);
 
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    const bgColor = `rgb(${r}, ${g}, ${b})`;
-    // const mostReadable = tinycolor.mostReadable(bgColor, ["#000", "#fff"])
-    element.style.backgroundColor = bgColor;
-    // this.element.style.color = mostReadable.toHexString();
-  }
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  const bgColor = `rgb(${r}, ${g}, ${b})`;
+  // const mostReadable = tinycolor.mostReadable(bgColor, ["#000", "#fff"])
+  element.style.backgroundColor = bgColor;
+  // this.element.style.color = mostReadable.toHexString();
+}
 
 // Acionamento do Toast inferior direito
-function showToast(msg){
-  
+function showToast(msg) {
+
   const toast = document.getElementById('toast');
   toast.textContent = msg;
   toast.classList.add('show');
 
   setTimeout(() => {
     toast.classList.remove('show');
-  },3500);
-    
+  }, 3500);
 }
 // Atualizar velocidade baseado no slider
 // speedSlider.addEventListener("input", function () {
@@ -179,17 +178,26 @@ function showToast(msg){
 // });
 
 document.addEventListener("click", function () {
-  socket.emit("clickEvent");  
+  socket.emit("clickEvent");
 });
+
+const urlString = window.location.search;
+const urlParams = new URLSearchParams(urlString);
+
+const roomId = urlParams.get('room')
+
+if (roomId == null || roomId == '') {
+  window.location.href = '/login';
+}
 
 const socket = io('', {
   query: {
-      "room": "padrao"
+    "room": roomId
   }
 });
 socket.on("gameStart", (gameState) => {
-    console.log("Game state received:", gameState);
-    updateLogoCount(gameState);
+  console.log("Game state received:", gameState);
+  updateLogoCount(gameState);
 });
 socket.on("gameUpdate", (players) => {
   players.forEach((player) => {
@@ -199,20 +207,20 @@ socket.on("gameUpdate", (players) => {
     if (!element) return;
     // console.log("Player position:", player);
     if (player.hitCorner) {
-        element.style.transform = "scale(2)";
-        setTimeout(() => {
-            element.style.transform = "scale(1)";
-        }, 1000);
+      element.style.transform = "scale(2)";
+      setTimeout(() => {
+        element.style.transform = "scale(1)";
+      }, 1000);
     }
     requestAnimationFrame(() => {
-        element.style.left = player.position.w + "px";
-        element.style.top = player.position.h + "px";
+      element.style.left = player.position.w + "px";
+      element.style.top = player.position.h + "px";
 
-        if (player.hitWall) {
-            requestAnimationFrame(() => {
-                changeColor(player);
-            })
-        }
+      if (player.hitWall) {
+        requestAnimationFrame(() => {
+          changeColor(player);
+        })
+      }
     });
   });
 });
@@ -227,6 +235,14 @@ socket.on("disconnect", () => {
 
 socket.on('toast', (msg) => {
   showToast(msg.message);
+})
+
+socket.on('invalidRoom', () => {
+  window.location.href = '/login';
+});
+
+socket.on('roomFinished', () => {
+  window.location.href = `/ranking?room=${roomId}`;
 })
 
 function start(e) {
