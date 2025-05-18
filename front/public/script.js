@@ -95,22 +95,22 @@ function createLogo(user) {
   logo.appendChild(img);
   container.appendChild(logo);
 
-//   const x = Math.random() * (containerRect.width - 200);
-//   const y = Math.random() * (containerRect.height - 100);
+  //   const x = Math.random() * (containerRect.width - 200);
+  //   const y = Math.random() * (containerRect.height - 100);
 
   // Velocidade inicial (direção aleatória)
-//   const speedX = (Math.random() > 0.5 ? 1 : -1) * baseSpeed;
-//   const speedY = (Math.random() > 0.5 ? 1 : -1) * baseSpeed;
+  //   const speedX = (Math.random() > 0.5 ? 1 : -1) * baseSpeed;
+  //   const speedY = (Math.random() > 0.5 ? 1 : -1) * baseSpeed;
 
-//   const dvdLogo = new DvdLogo(logo, x, y, speedX, speedY);
-//   dvdLogo.changeColor(); // Definir cor inicial
+  //   const dvdLogo = new DvdLogo(logo, x, y, speedX, speedY);
+  //   dvdLogo.changeColor(); // Definir cor inicial
 
-//   return dvdLogo;
+  //   return dvdLogo;
 }
 
 // Função para atualizar o número de logos
 function updateLogoCount(users) {
-    const userLength = Object.keys(users).length;
+  const userLength = Object.keys(users).length;
 
   // Remover todos os logos atuais
   logos.forEach((logo) => {
@@ -130,18 +130,19 @@ function updateLogoCount(users) {
 }
 
 function changeColor(user) {
-    const element = document.querySelector(`.uuid-${user.id}`);
+  const element = document.querySelector(`.uuid-${user.id}`);
 
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    const bgColor = `rgb(${r}, ${g}, ${b})`;
-    // const mostReadable = tinycolor.mostReadable(bgColor, ["#000", "#fff"])
-    element.style.backgroundColor = bgColor;
-    // this.element.style.color = mostReadable.toHexString();
-  }
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  const bgColor = `rgb(${r}, ${g}, ${b})`;
+  // const mostReadable = tinycolor.mostReadable(bgColor, ["#000", "#fff"])
+  element.style.backgroundColor = bgColor;
+  // this.element.style.color = mostReadable.toHexString();
+}
 
 // Acionamento do Toast inferior direito
+<<<<<<< Updated upstream
 function showToast(msg){
   
   const toast = document.getElementById('toast');
@@ -152,6 +153,31 @@ function showToast(msg){
     toast.classList.remove('show');
   },3500);
     
+=======
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  try {
+    logos.forEach((logo) => {
+      logo.unnecessaryClicks += 1;
+      console.log(logo.unnecessaryClicks);
+      if (logo.unnecessaryClicks >= 2) {
+        console.log('passou aqui');
+        window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+      }
+    })
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500);
+  } catch (error) {
+    showToast("Erro ao validar cliques desnecessários")
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500);
+
+  }
+>>>>>>> Stashed changes
 }
 // Atualizar velocidade baseado no slider
 // speedSlider.addEventListener("input", function () {
@@ -182,14 +208,23 @@ document.addEventListener("click", function () {
   socket.emit("clickEvent");  
 });
 
+const urlString = window.location.search;
+const urlParams = new URLSearchParams(urlString);
+
+const roomId = urlParams.get('room')
+
+if (roomId == null || roomId == '') {
+  window.location.href = '/login';
+}
+
 const socket = io('', {
   query: {
-      "room": "padrao"
+    "room": roomId
   }
 });
 socket.on("gameStart", (gameState) => {
-    console.log("Game state received:", gameState);
-    updateLogoCount(gameState);
+  console.log("Game state received:", gameState);
+  updateLogoCount(gameState);
 });
 socket.on("gameUpdate", (players) => {
   players.forEach((player) => {
@@ -205,14 +240,14 @@ socket.on("gameUpdate", (players) => {
         }, 1000);
     }
     requestAnimationFrame(() => {
-        element.style.left = player.position.w + "px";
-        element.style.top = player.position.h + "px";
+      element.style.left = player.position.w + "px";
+      element.style.top = player.position.h + "px";
 
-        if (player.hitWall) {
-            requestAnimationFrame(() => {
-                changeColor(player);
-            })
-        }
+      if (player.hitWall) {
+        requestAnimationFrame(() => {
+          changeColor(player);
+        })
+      }
     });
   });
 });
@@ -225,11 +260,23 @@ socket.on("disconnect", () => {
   console.log("Disconnected from server");
 });
 
+<<<<<<< Updated upstream
 socket.on('toast', (msg) => {
   showToast(msg.message);
 })
 
 function start(e) {
+=======
+socket.on('invalidRoom', () => {
+  window.location.href = '/login';
+});
+
+socket.on('roomFinished', () => {
+  window.location.href = `/ranking?room=${roomId}`;
+})
+
+function start() {
+>>>>>>> Stashed changes
   // Inicializar o jogo
   socket.emit("startGame");
 }

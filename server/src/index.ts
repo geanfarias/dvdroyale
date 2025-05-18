@@ -6,6 +6,8 @@ import Player from "./websocket/player";
 import http from 'http';
 import { Server } from 'socket.io';
 import SocketRoom from './websocket/SocketRoom';
+import bodyParser from 'body-parser';
+import RoomController from './controller/room.controller';
 
 const app = express()
 const port = 3000
@@ -14,27 +16,46 @@ const io = new Server(server);
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded())
 app.use(express.static('../front/public'));
 
 const activeRooms: { [roomId: string]: SocketRoom } = {};
+const roomController = new RoomController();
 
 // WebSocket connection handling
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log('a user connected');
+  const cookies = socket.handshake.headers.cookie;
+  const uuid = cookies?.split('; ').find(row => row.startsWith('uuid='))?.split('=')[1];
   const roomId = socket.handshake.query.room as string | null;
+  console.log(uuid)
+
   console.log('roomId:', roomId);
-  if (roomId == null || roomId == '') {
+  if ((uuid == null == undefined || uuid == null || uuid == '') || (roomId == null == undefined || roomId == null || roomId == '')) {
+    socket.emit('invalidRoom')
     return socket.disconnect();
   }
 
-  const player = new Player("Player_" + socket.id.substring(0, 5), socket.id, socket);
+  let dbRoom = await roomController.getRoom(roomId)
+  console.log('dbRoom at get:', dbRoom)
+  if (dbRoom == null) {
+    dbRoom = await roomController.createRoom(uuid);
+    console.log('dbRoom after create:', dbRoom)
+  } else {
+    if (dbRoom.finished) {
+      socket.emit('roomFinished');
+      return socket.disconnect();
+    }
+  }
+
+  const player = new Player("Player_" + uuid, uuid, socket);
 
   let socketGame = activeRooms[roomId];
   let game: Game;
   console.log('socketGame first:', socketGame);
 
   if (socketGame == null) {
-    game = new Game();
+    game = new Game(roomId);
     socketGame = new SocketRoom(game);
     activeRooms[roomId] = socketGame;
   } else {
@@ -53,6 +74,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
+    if (uuid == undefined || uuid == null || uuid == '') return
     game.disconnectPlayer(player);
   });
   

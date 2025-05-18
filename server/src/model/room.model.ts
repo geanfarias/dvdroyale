@@ -3,10 +3,10 @@ import db from "../database/db";
 import PlayerModel from "./player.model";
 
 const RoomModel = db.define('Room', {
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
     },
     owner: {
         type: DataTypes.UUID,
@@ -15,7 +15,12 @@ const RoomModel = db.define('Room', {
             model: PlayerModel,
             key: 'uuid'
         }
-    }
+    },
+    finished: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
 })
 
 export default RoomModel

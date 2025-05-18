@@ -1,5 +1,10 @@
+import RoomController from "../controller/room.controller";
+import RoomRankingController from "../controller/room_ranking.controller";
 import Player from "./player";
 import Size from "./size";
+
+const roomRankingController = new RoomRankingController();
+const roomController = new RoomController();
 
 export default class Game {
     private readonly pointsBase = 1
@@ -7,6 +12,13 @@ export default class Game {
     private readonly size: Size = { w: 640, h: 480 }
 
     readonly players: Player[] = [];
+    private rankingMap: { [uuid: string]: number } = {};
+
+    private readonly roomId: string;
+
+    constructor(room: string) {
+        this.roomId = room;
+    }
 
     addPlayer(player: Player) {
         player.position.w = Math.floor(Math.random() * this.size.w);
@@ -16,6 +28,14 @@ export default class Game {
     }
 
     disconnectPlayer(player: Player) {
+        if ((this.players.length - 1) == 0) {
+            console.log("No players left, ending game");
+
+            console.log(this.rankingMap)
+            roomRankingController.save(this.roomId, this.rankingMap);
+            roomController.markAsFinished(this.roomId);
+        }
+
         const playerIndex = this.players.findIndex(p => p == player);
         if (playerIndex !== -1) {
             const playerDisconnected = this.players.splice(playerIndex, 1)[0];
@@ -70,10 +90,12 @@ export default class Game {
         player.hitWall = onWidth || onHeight;
         player.hitCorner = onWidth && onHeight;
         if (player.hitCorner) {
-            player.points += this.pointsBase*10
+            player.points += this.pointsBase * 10
         } else if (player.hitWall) {
-            player.points += this.pointsBase*1
+            player.points += this.pointsBase * 1
         }
+
+        this.rankingMap[player.uuid] = player.points;
 
         player.direction = player.direction % 360;
         if (player.direction < 0) {
