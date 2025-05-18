@@ -33,4 +33,10 @@ export default class Player {
             currentPlayer: false,
         }
     }
+
+    viciar() {
+        this.position.w = 0;
+        this.position.h = 0;
+        this.direction = 38.4;
+    }
 }

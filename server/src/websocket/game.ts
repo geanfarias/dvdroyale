@@ -12,7 +12,7 @@ export default class Game {
         player.position.w = Math.floor(Math.random() * this.size.w);
         player.position.h = Math.floor(Math.random() * this.size.h);
         player.direction = randomDirection();
-        this.players.push(player);
+        this.players.push(player);        
     }
 
     disconnectPlayer(player: Player) {
@@ -21,10 +21,6 @@ export default class Game {
             const playerDisconnected = this.players.splice(playerIndex, 1)[0];
             this.players.forEach(player => player.socket.emit("playerDisconnected", playerDisconnected.toSerializable()))
         }
-    }
-
-    getPlayers() {
-        return this.players;
     }
 
     startGame() {
@@ -94,23 +90,10 @@ export default class Game {
 }
 
 function newDitection(direction:number, base:number):number {
-    if (isApproximately(direction,45)) {
-        direction = 45
-    } else if (isApproximately(direction,135)) {
-        direction = 135
-    } else if (isApproximately(direction,225)) {
-        direction = 225
-    } else if (isApproximately(direction,315)) {
-        direction = 315
-    }
     return randomizeAround(base - direction)
 }
 
 const default_margin = 10
-
-function isApproximately(value:number, target:number, margin = default_margin) {
-  return Math.abs(value - target) <= margin;
-}
 
 function randomizeAround(value:number, range = default_margin) {
   const offset = Math.floor(Math.random() * (range * 2 + 1)) - range;

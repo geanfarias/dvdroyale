@@ -198,7 +198,12 @@ socket.on("gameUpdate", (players) => {
 
     if (!element) return;
     // console.log("Player position:", player);
-
+    if (player.hitCorner) {
+        element.style.transform = "scale(2)";
+        setTimeout(() => {
+            element.style.transform = "scale(1)";
+        }, 1000);
+    }
     requestAnimationFrame(() => {
         element.style.left = player.position.w + "px";
         element.style.top = player.position.h + "px";
@@ -225,9 +230,11 @@ socket.on('toast', (msg) => {
 })
 
 function start(e) {
-  e.preventDefault();
   // Inicializar o jogo
   socket.emit("startGame");
 }
-
+function forceCorner(e) {
+  socket.emit("forceCorner");
+}
 document.getElementById("startButton").addEventListener("click", start);
+document.getElementById("forceCorner").addEventListener("click", forceCorner);

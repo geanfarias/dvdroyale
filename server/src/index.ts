@@ -60,6 +60,9 @@ io.on('connection', (socket) => {
     game.toast(player);
   })
 
+  socket.on('forceCorner', () =>{
+    player.viciar();
+  })
 
 });
 
