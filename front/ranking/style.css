@@ -3,27 +3,23 @@ body {
   overflow: hidden;
   background-color: #000;
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   font-family: Arial, sans-serif;
 }
 
-.button {
-  background: linear-gradient(to bottom, #444, #222);
-  border: 2px solid #555;
-  font-size: 1.3rem;
-  transition: all 0.3s;
-  padding: 10px;
-  margin: 10px;
+.container,
+.main-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: auto;
 }
 
-.button:hover {
-  background: linear-gradient(to bottom, #555, #333);
-  box-shadow: 0 0 5px rgba(191, 168, 255, 0.5);
-  transform: scale(1.02);
-}
-
-.player-one {
-  padding-bottom: 10px;
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .player-skin {
@@ -35,127 +31,48 @@ body {
   font-family: Arial, sans-serif;
   font-weight: bold;
   font-size: 20px;
-  border-radius: 80%;
   user-select: none;
   color: white;
+  border-radius: 70%;
+  margin: 5px;
 }
 
-.container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin: auto;
-}
-
-.skin-player {
-  width: 10px;
-  height: 10px;
+.dvd-logo {
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
   font-weight: bold;
-  font-size: 5px;
-  border-radius: 80%;
   user-select: none;
   color: white;
+  border-radius: 80%;
 }
 
 .dvd-logo {
   position: absolute;
   width: 200px;
   height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
   font-size: 48px;
-  border-radius: 80%;
-  user-select: none;
-  color: white;
 }
 
-.controls {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 15px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 100;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+.player-first-skin {
+  background-color: #34d399;
 }
 
-.speed-control {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-  width: 100%;
+.player-second {
+  background-color: #60a5fa;
 }
 
-label {
-  color: white;
-  margin-right: 10px;
-  font-size: 14px;
-  min-width: 60px;
-}
-
-input[type="range"] {
-  width: 200px;
-  margin: 0 10px;
-}
-
-.speed-value {
-  color: white;
-  font-size: 14px;
-  min-width: 30px;
-  text-align: center;
-}
-
-.toggle-controls {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.toggle-controls:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-.hidden {
-  display: none;
-}
-
-label {
-  color: white;
-  margin-right: 10px;
-  font-size: 14px;
-  min-width: 60px;
-}
-
-input[type="range"] {
-  width: 200px;
-  margin: 0 10px;
+.player-third {
+  background-color: #f87171;
 }
 
 .ranking-container {
+  padding: 2rem;
+  width: 27%;
+  height: 80%;
+  max-width: 28rem;
+  margin: 1rem;
   background-color: rgba(0, 0, 0, 0.7);
   border: 2px solid #444;
   border-radius: 15px;
@@ -163,32 +80,161 @@ input[type="range"] {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
+.ranking-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.ranking-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.ranking-subtitle {
+  color: #9ca3af;
+  margin-top: 0.5rem;
+}
+
+.ranking-box {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  max-width: 28rem;
+  margin: 0 auto;
+  border: 1px solid #374151;
+}
+
+.ranking-box-title {
+  color: white;
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: monospace;
+}
+
+.ranking-top-players {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.player-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.player-first {
+  transform: scale(1.1);
+  margin-bottom: 0.5rem;
+}
+
+.player-name {
+  font-size: 0.875rem;
+  color: #e5e7eb;
+  font-family: monospace;
+}
+
+.player-first .player-name {
+  color: white;
+}
+
+.player-points {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-family: monospace;
+}
+
+.ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: monospace;
+  color: white;
+  font-size: 1rem;
+}
+
+.ranking-item {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #4b5563;
+}
+
+.ranking-item span:last-child {
+  color: #9ca3af;
+}
+.ranking-actions {
+  padding: 20px;
+}
+
+.button,
+.ranking-button,
+.ranking-btn {
+  background: linear-gradient(to bottom, #444, #222);
+  border: 2px solid #555;
+  font-family: monospace;
+  transition: all 0.3s;
+  cursor: pointer;
+  color: #60a5fa;
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(191, 168, 255, 0.5);
+}
+
+.ranking-button {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.button:hover,
+.ranking-button:hover,
+.ranking-btn:hover {
+  background: linear-gradient(to bottom, #555, #333);
+  box-shadow: 0 0 5px rgba(191, 168, 255, 0.5);
+  transform: scale(1.02);
+}
+
+label {
+  color: white;
+  margin-right: 10px;
+  font-size: 14px;
+  min-width: 60px;
+}
+
+input[type="range"] {
+  width: 200px;
+  margin: 0 10px;
+}
+
+.hidden {
+  display: none;
+}
+
 .input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
   background-color: #111;
   border: 2px solid #444;
   color: #fff;
   font-family: "VT323", monospace;
   font-size: 1.2rem;
   transition: all 0.3s;
+  box-sizing: border-box;
 }
 
 .input-field:focus {
   border-color: rgba(191, 168, 255, 0.5);
   box-shadow: 0 0 10px rgba(191, 168, 255, 0.5);
   outline: none;
-}
-
-.ranking-btn {
-  background: linear-gradient(to bottom, #444, #222);
-  border: 2px solid #555;
-  font-family: "VT323", monospace;
-  font-size: 1.3rem;
-  transition: all 0.3s;
-  text-shadow: 0 0 5px rgba(191, 168, 255, 0.5);
-}
-
-.ranking-btn:hover {
-  background: linear-gradient(to bottom, #555, #333);
-  box-shadow: 0 0 15px rgba(191, 168, 255, 0.5);
-  transform: scale(1.05);
 }
