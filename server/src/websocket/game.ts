@@ -8,7 +8,7 @@ const roomController = new RoomController();
 
 export default class Game {
     private readonly pointsBase = 1
-    private started = false;
+    started = false;
     private readonly size: Size = { w: 640, h: 480 }
 
     readonly players: Player[] = [];
@@ -24,11 +24,11 @@ export default class Game {
         player.position.w = Math.floor(Math.random() * this.size.w);
         player.position.h = Math.floor(Math.random() * this.size.h);
         player.direction = randomDirection();
-        this.players.push(player);        
+        this.players.push(player);
     }
 
     disconnectPlayer(player: Player) {
-        if ((this.players.length - 1) == 0) {
+        if ((this.players.length - 1) == 0 && this.started) {
             console.log("No players left, ending game");
 
             console.log(this.rankingMap)
@@ -45,6 +45,10 @@ export default class Game {
 
     startGame() {
         if (this.started) return
+        if (this.players.length < 2) {
+            this.players.forEach(player => player.socket.emit('toast', { message: "Pelo menos 2 jogadores precisam estar na sala!" }));
+            return
+        }
         console.log(this.players)
         const playerData = this.players.map(player => ({
             id: player.uuid,
@@ -61,7 +65,7 @@ export default class Game {
         this.players.forEach(player => this.runPlayer(player));
         const playerData = this.players.map(player => player.toSerializable());
         this.players.forEach(player => {
-            playerData.forEach(p => {p.currentPlayer = p.id == player.uuid})
+            playerData.forEach(p => { p.currentPlayer = p.id == player.uuid })
             player.socket.emit('gameUpdate', playerData);
         });
     }
@@ -103,27 +107,27 @@ export default class Game {
         }
     }
 
-    toast(player: Player){
+    toast(player: Player) {
         player.unnecessaryClicks++;
-        if (player.unnecessaryClicks == 1){
-            player.socket.emit('toast', {message: "Unnecessary click!"});
+        if (player.unnecessaryClicks == 1) {
+            player.socket.emit('toast', { message: "Unnecessary click!" });
         }
     }
 }
 
-function newDitection(direction:number, base:number):number {
+function newDitection(direction: number, base: number): number {
     return randomizeAround(base - direction)
 }
 
 const default_margin = 10
 
-function randomizeAround(value:number, range = default_margin) {
-  const offset = Math.floor(Math.random() * (range * 2 + 1)) - range;
-  return value + offset;
+function randomizeAround(value: number, range = default_margin) {
+    const offset = Math.floor(Math.random() * (range * 2 + 1)) - range;
+    return value + offset;
 }
 
 function randomDirection() {
-  const values = [45, 135, 225, 315];
-  const index = Math.floor(Math.random() * values.length);
-  return randomizeAround(values[index]);
+    const values = [45, 135, 225, 315];
+    const index = Math.floor(Math.random() * values.length);
+    return randomizeAround(values[index]);
 }

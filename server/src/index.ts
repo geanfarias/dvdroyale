@@ -77,12 +77,13 @@ io.on('connection', async (socket) => {
     if (uuid == undefined || uuid == null || uuid == '') return
     game.disconnectPlayer(player);
   });
-  
-  socket.on('clickEvent', () =>{
+
+  socket.on('clickEvent', () => {
+    if (game.started == false) return
     game.toast(player);
   })
 
-  socket.on('forceCorner', () =>{
+  socket.on('forceCorner', () => {
     player.viciar();
   })
 
