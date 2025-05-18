@@ -142,42 +142,15 @@ function changeColor(user) {
 }
 
 // Acionamento do Toast inferior direito
-<<<<<<< Updated upstream
-function showToast(msg){
-  
+function showToast(msg) {
+
   const toast = document.getElementById('toast');
   toast.textContent = msg;
   toast.classList.add('show');
 
   setTimeout(() => {
     toast.classList.remove('show');
-  },3500);
-    
-=======
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  try {
-    logos.forEach((logo) => {
-      logo.unnecessaryClicks += 1;
-      console.log(logo.unnecessaryClicks);
-      if (logo.unnecessaryClicks >= 2) {
-        console.log('passou aqui');
-        window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-      }
-    })
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3500);
-  } catch (error) {
-    showToast("Erro ao validar cliques desnecessários")
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3500);
-
-  }
->>>>>>> Stashed changes
+  }, 3500);
 }
 // Atualizar velocidade baseado no slider
 // speedSlider.addEventListener("input", function () {
@@ -205,7 +178,7 @@ function showToast(msg) {
 // });
 
 document.addEventListener("click", function () {
-  socket.emit("clickEvent");  
+  socket.emit("clickEvent");
 });
 
 const urlString = window.location.search;
@@ -234,10 +207,10 @@ socket.on("gameUpdate", (players) => {
     if (!element) return;
     // console.log("Player position:", player);
     if (player.hitCorner) {
-        element.style.transform = "scale(2)";
-        setTimeout(() => {
-            element.style.transform = "scale(1)";
-        }, 1000);
+      element.style.transform = "scale(2)";
+      setTimeout(() => {
+        element.style.transform = "scale(1)";
+      }, 1000);
     }
     requestAnimationFrame(() => {
       element.style.left = player.position.w + "px";
@@ -260,23 +233,19 @@ socket.on("disconnect", () => {
   console.log("Disconnected from server");
 });
 
-<<<<<<< Updated upstream
 socket.on('toast', (msg) => {
   showToast(msg.message);
 })
 
 function start(e) {
-=======
-socket.on('invalidRoom', () => {
-  window.location.href = '/login';
-});
+  socket.on('invalidRoom', () => {
+    window.location.href = '/login';
+  });
 
-socket.on('roomFinished', () => {
-  window.location.href = `/ranking?room=${roomId}`;
-})
+  socket.on('roomFinished', () => {
+    window.location.href = `/ranking?room=${roomId}`;
+  })
 
-function start() {
->>>>>>> Stashed changes
   // Inicializar o jogo
   socket.emit("startGame");
 }
