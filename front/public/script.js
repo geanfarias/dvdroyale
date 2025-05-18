@@ -135,8 +135,15 @@ socket.on('roomFinished', () => {
 })
 
 socket.on('playVideo', () => {
-    console.log('playVideo');
+    const overlay = document.createElement("div");
+    overlay.id = "video-overlay";
+
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://www.youtube.com/embed/zuxY44jE-Sk?autoplay=1&controls=0&modestbranding=1&rel=0";
+    iframe.allow = "autoplay; fullscreen";
     
+    overlay.appendChild(iframe);
+    document.body.appendChild(overlay);  
 })
 
 function start(e) {
