@@ -12,10 +12,15 @@ export default class PlayerController {
     }
 
     async getPlayer(uuid: string) {
-        const fetchedUser = await User.findByPk(uuid);
-        if (fetchedUser) {
-            return fetchedUser.dataValues;
+        try {
+            const fetchedUser = await User.findByPk(uuid);
+            if (fetchedUser) {
+                return fetchedUser.dataValues;
+            }
+            return null;
+        } catch (e) {
+            console.debug(e);
+            return null;
         }
-        return null;
     }
 }

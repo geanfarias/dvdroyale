@@ -45,10 +45,6 @@ export default class Game {
 
     startGame() {
         if (this.started) return
-        if (this.players.length < 2) {
-            this.players.forEach(player => player.socket.emit('toast', { message: "Pelo menos 2 jogadores precisam estar na sala!" }));
-            return
-        }
         console.log(this.players)
         const playerData = this.players.map(player => ({
             id: player.uuid,

@@ -8,6 +8,7 @@ import { Server } from 'socket.io';
 import SocketRoom from './websocket/SocketRoom';
 import bodyParser from 'body-parser';
 import RoomController from './controller/room.controller';
+import PlayerController from './controller/player.controller';
 
 const app = express()
 const port = 3000
@@ -21,6 +22,7 @@ app.use(express.static('../front/public'));
 
 const activeRooms: { [roomId: string]: SocketRoom } = {};
 const roomController = new RoomController();
+const playerController = new PlayerController();
 
 // WebSocket connection handling
 io.on('connection', async (socket) => {
@@ -32,6 +34,13 @@ io.on('connection', async (socket) => {
 
   console.log('roomId:', roomId);
   if ((uuid == null == undefined || uuid == null || uuid == '') || (roomId == null == undefined || roomId == null || roomId == '')) {
+    socket.emit('invalidRoom')
+    return socket.disconnect();
+  }
+
+  let dbPlayer = await playerController.getPlayer(uuid);
+  console.log('dbPlayer at get:', dbPlayer)
+  if (dbPlayer == null) {
     socket.emit('invalidRoom')
     return socket.disconnect();
   }
@@ -48,7 +57,7 @@ io.on('connection', async (socket) => {
     }
   }
 
-  const player = new Player("Player_" + uuid, uuid, socket);
+  const player = new Player(dbPlayer.name, uuid, socket);
 
   let socketGame = activeRooms[roomId];
   let game: Game;
