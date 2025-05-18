@@ -74,26 +74,35 @@ function showToast(msg) {
     toast.classList.remove('show');
   }, 5500);
 }
-  
+
 container.addEventListener("click", function (event) {
   if (event.target === container) {
-      socket.emit("clickEvent");
+    socket.emit("clickEvent");
   }
 });
 
+const urlString = window.location.search;
+const urlParams = new URLSearchParams(urlString);
+
+const roomId = urlParams.get('room')
+
+if (roomId == null || roomId == '') {
+  window.location.href = '/login';
+}
+
 const socket = io("", {
   query: {
-    room: "padrao",
+    room: roomId,
   },
 });
 
 function setPlayers(players) {
-    const userLength = Object.keys(players).length;
+  const userLength = Object.keys(players).length;
 
-    for (let i = 0; i < userLength; i++) {
-      const player = players[i];
-      logos.push(createLogo(player));
-    }
+  for (let i = 0; i < userLength; i++) {
+    const player = players[i];
+    logos.push(createLogo(player));
+  }
 }
 
 socket.on("gameStart", (players) => {
@@ -101,14 +110,14 @@ socket.on("gameStart", (players) => {
 });
 
 socket.on("gameUpdate", (players) => {
-    if (logos.length === 0) {
-        setPlayers(players);
-    }
+  if (logos.length === 0) {
+    setPlayers(players);
+  }
 
   players.forEach((player) => {
-        const logo = logos.find((logo) => logo.user.id === player.id);
+    const logo = logos.find((logo) => logo.user.id === player.id);
 
-        if (!logo) return;
+    if (!logo) return;
 
     // console.log(player);
 
@@ -118,28 +127,28 @@ socket.on("gameUpdate", (players) => {
     //     element.style.transform = "scale(1)";
     //   }, 1000);
     // }
-        requestAnimationFrame(() => {
-            logo.update(player);
-        });
+    requestAnimationFrame(() => {
+      logo.update(player);
     });
-    
-    updateRanking(players);
+  });
+
+  updateRanking(players);
 });
 
 function updateRanking(players) {
-    console.log(players);
-    const userLength = Object.keys(players).length;
+  console.log(players);
+  const userLength = Object.keys(players).length;
 
-    ranking.innerHTML = "";
+  ranking.innerHTML = "";
 
-    for (let i = 0; i < userLength; i++) {
-        const player = players[i];
-        const template = rankingTemplate.content.cloneNode(true);
-        template.querySelector(".js-name").textContent = player.name;
-        template.querySelector(".js-score").textContent = player.points;
+  for (let i = 0; i < userLength; i++) {
+    const player = players[i];
+    const template = rankingTemplate.content.cloneNode(true);
+    template.querySelector(".js-name").textContent = player.name;
+    template.querySelector(".js-score").textContent = player.points;
 
-        ranking.appendChild(template);
-    }
+    ranking.appendChild(template);
+  }
 };
 
 socket.on("connect", () => {
@@ -163,15 +172,15 @@ socket.on('roomFinished', () => {
 })
 
 socket.on('playVideo', () => {
-    const overlay = document.createElement("div");
-    overlay.id = "video-overlay";
+  const overlay = document.createElement("div");
+  overlay.id = "video-overlay";
 
-    const iframe = document.createElement("iframe");
-    iframe.src = "https://www.youtube.com/embed/zuxY44jE-Sk?autoplay=1&controls=0&modestbranding=1&rel=0";
-    iframe.allow = "autoplay; fullscreen";
-    
-    overlay.appendChild(iframe);
-    document.body.appendChild(overlay);  
+  const iframe = document.createElement("iframe");
+  iframe.src = "https://www.youtube.com/embed/zuxY44jE-Sk?autoplay=1&controls=0&modestbranding=1&rel=0";
+  iframe.allow = "autoplay; fullscreen";
+
+  overlay.appendChild(iframe);
+  document.body.appendChild(overlay);
 })
 
 function start(e) {

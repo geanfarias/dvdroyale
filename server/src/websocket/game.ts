@@ -13,7 +13,8 @@ export default class Game {
     private readonly size: Size = { w: 640, h: 480 }
     readonly players: Player[] = [];
     private readonly chanceSurprise = 0.1;
-    private readonly surprises:string[] = [];
+    private readonly surprises: string[] = [];
+    private startTime: Date | null = null;
 
     private rankingMap: { [uuid: string]: number } = {};
 
@@ -61,10 +62,24 @@ export default class Game {
             player.socket.emit('gameStart', playerData);
         });
         this.started = true;
+        this.startTime = new Date();
         setInterval(() => this.updateGame(), 100);
     }
 
     updateGame() {
+        if (!this.started) return
+
+        const dateNow = new Date();
+        const timeDiff = dateNow.getTime() - this.startTime!.getTime();
+        const diffInSeconds = Math.floor(timeDiff / 1000);
+        const diffInMinutes = Math.floor(diffInSeconds / 60);
+        if (diffInMinutes >= 5) {
+            this.players.forEach(player => {
+                player.socket.emit('roomFinished');
+                player.socket.disconnect();
+            });
+        }
+
         if (Math.random() < this.chanceSurprise) {
             this.addSurprise();
         }
@@ -101,7 +116,7 @@ export default class Game {
         player.hitCorner = onWidth && onHeight;
         if (player.hitCorner) {
             player.speedBoost(10, 5000);
-            player.points += this.pointsBase*10
+            player.points += this.pointsBase * 10
         } else if (player.hitWall) {
             player.points += this.pointsBase * 1
         }
@@ -116,14 +131,14 @@ export default class Game {
 
     toast(player: Player) {
         player.unnecessaryClicks++;
-        if (player.unnecessaryClicks == 1){
-            player.socket.emit('toast', {message: "Você saiu do modo hibernação!! \n Não ouse repetir o clique! \n Algo terrível pode acontecer!"});
-        } else if (player.unnecessaryClicks == 2){
-            player.socket.emit('toast',{message: "Você foi punido por clicar novamente! \n Agora é sério, NÃO CLIQUE NOVAMENTE!"});
+        if (player.unnecessaryClicks == 1) {
+            player.socket.emit('toast', { message: "Você saiu do modo hibernação!! \n Não ouse repetir o clique! \n Algo terrível pode acontecer!" });
+        } else if (player.unnecessaryClicks == 2) {
+            player.socket.emit('toast', { message: "Você foi punido por clicar novamente! \n Agora é sério, NÃO CLIQUE NOVAMENTE!" });
             player.speedPenalty(4500)
         } else {
             player.socket.emit('playVideo')
-            player.socket.emit('toast',{message: "Você saiu do modo repouso!! \n O filme será iniciado em breve. \n Até mais!!"});
+            player.socket.emit('toast', { message: "Você saiu do modo repouso!! \n O filme será iniciado em breve. \n Até mais!!" });
             this.disconnectPlayer(player);
         }
     }
@@ -147,14 +162,14 @@ export default class Game {
         if (surpriseIndex !== -1) {
             this.surprises.splice(surpriseIndex, 1);
             if (randomizeHappySuprise()) {
-                player.socket.emit('toast', {message: "Happy surprise!"});
-                player.points += this.pointsBase*5;
-                player.socket.emit('toast', {message: "Surprise!"});
+                player.socket.emit('toast', { message: "Happy surprise!" });
+                player.points += this.pointsBase * 5;
+                player.socket.emit('toast', { message: "Surprise!" });
                 this.players.forEach(p => {
                     p.socket.emit('surpriseExecuted', surpriseId);
                 });
             } else {
-                player.socket.emit('toast', {message: "Sad surprise!"});
+                player.socket.emit('toast', { message: "Sad surprise!" });
                 player.speed = 0
                 setTimeout(() => {
                     player.speed = 5;
@@ -170,7 +185,7 @@ export default class Game {
 const happyPercent = 0.5;
 function randomizeHappySuprise() {
     return Math.random() < happyPercent;
-}	
+}
 
 function newDitection(direction: number, base: number): number {
     return randomizeAround(base - direction)
