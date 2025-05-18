@@ -47,4 +47,11 @@ export default class Player {
             this.speed -= this.baseSpeed * multiplier;
         }, time);
     }
+
+    speedPenalty (time:number){
+        this.speed = 2;
+        setTimeout(()=>{
+            this.speed = this.baseSpeed
+        }, time);
+    }
 }

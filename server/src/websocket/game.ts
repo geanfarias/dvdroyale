@@ -86,7 +86,9 @@ export default class Game {
     toast(player: Player){
         player.unnecessaryClicks++;
         if (player.unnecessaryClicks == 1){
-            player.socket.emit('toast', {message: "Unnecessary click!"});
+            player.socket.emit('toast', {message: "Você saiu do modo hibernação!! \n Não ouse repetir o clique! \n Algo terrível pode acontecer!s"});
+        } else if (player.unnecessaryClicks == 2){
+            player.speedPenalty(3000)
         }
     }
 }
