@@ -35,6 +35,16 @@ body {
   user-select: none;
   color: white;
   transition: background-color 0.2s ease-in-out;
+  background-position: center;
+  background-size: 70%;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+}
+
+.dvd-logo.current-player {
+    z-index: 2;
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
 }
 
 .controls {
@@ -53,10 +63,11 @@ body {
 }
 
 .ranking {
-    color: white;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    max-height: 480px;
+    overflow-y: auto;
 }
 
 .ranking > div {
@@ -79,6 +90,27 @@ button {
     cursor: pointer;
     margin: 5px;
     transition: background-color 0.2s ease-in-out;
+}
+
+button.surprise {
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    animation: blink 0.3s infinite alternate;
+    position: absolute;
+}
+
+@keyframes blink {
+    0% {
+      background-color: white;
+      color: black;
+    }
+    100% {
+      background-color: black;
+      color: white;
+    }
 }
 
 /* toast.css */
