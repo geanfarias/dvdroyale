@@ -96,6 +96,11 @@ io.on('connection', async (socket) => {
     player.viciar();
   })
 
+  socket.on('executeSurprise', (msg) => {
+    console.log('executeSurprise', msg);
+    game.executeSurprise(player, msg.id);
+  })
+
 });
 
 server.listen(port, () => {
