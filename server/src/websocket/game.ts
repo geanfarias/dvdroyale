@@ -5,10 +5,11 @@ export default class Game {
     private readonly pointsBase = 1
     private started = false;
     private readonly size: Size = { w: 640, h: 480 }
-
+    private readonly basePlayerSpeed = 5;
     readonly players: Player[] = [];
 
     addPlayer(player: Player) {
+        player.speed = this.basePlayerSpeed;
         player.position.w = Math.floor(Math.random() * this.size.w);
         player.position.h = Math.floor(Math.random() * this.size.h);
         player.direction = randomDirection();
@@ -70,6 +71,7 @@ export default class Game {
         player.hitWall = onWidth || onHeight;
         player.hitCorner = onWidth && onHeight;
         if (player.hitCorner) {
+            player.speedBoost(10, 5000);
             player.points += this.pointsBase*10
         } else if (player.hitWall) {
             player.points += this.pointsBase*1

@@ -10,6 +10,7 @@ export default class Player {
         h: 100,
     };
     direction: number = 45;
+    private readonly baseSpeed: number = 5;
     speed: number = 5;
     readonly socket: Socket;
     hitCorner: boolean = false;
@@ -35,8 +36,15 @@ export default class Player {
     }
 
     viciar() {
-        this.position.w = 0;
-        this.position.h = 0;
-        this.direction = 38.4;
+        this.position.w = 496;
+        this.position.h = 395;
+        this.direction = 38.5;
+    }
+
+    speedBoost(multiplier: number, time: number) {
+        this.speed += this.baseSpeed * multiplier;
+        setTimeout(() => {
+            this.speed -= this.baseSpeed * multiplier;
+        }, time);
     }
 }
