@@ -48,7 +48,7 @@ export default class Game {
 
     startGame() {
         if (this.started) return
-        if (this.players.length < 2) {
+        if (this.players.length < 0) {
             this.players.forEach(player => player.socket.emit('toast', { message: "Pelo menos 2 jogadores precisam estar na sala!" }));
             return
         }
@@ -117,9 +117,14 @@ export default class Game {
     toast(player: Player) {
         player.unnecessaryClicks++;
         if (player.unnecessaryClicks == 1){
-            player.socket.emit('toast', {message: "Você saiu do modo hibernação!! \n Não ouse repetir o clique! \n Algo terrível pode acontecer!s"});
+            player.socket.emit('toast', {message: "Você saiu do modo hibernação!! \n Não ouse repetir o clique! \n Algo terrível pode acontecer!"});
         } else if (player.unnecessaryClicks == 2){
-            player.speedPenalty(3000)
+            player.socket.emit('toast',{message: "Você foi punido por clicar novamente! \n Agora é sério, NÃO CLIQUE NOVAMENTE!"});
+            player.speedPenalty(4500)
+        } else {
+            player.socket.emit('playVideo')
+            player.socket.emit('toast',{message: "Você saiu do modo repouso!! \n O filme será iniciado em breve. \n Até mais!!"});
+            this.disconnectPlayer(player);
         }
     }
 

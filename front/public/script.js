@@ -70,20 +70,13 @@ function showToast(msg) {
 
   setTimeout(() => {
     toast.classList.remove('show');
-  },3500);
+  }, 5500);
 }
-
-document.addEventListener("click", function (e) {
-    const nodeName = e.target.nodeName;
-
-    if (nodeName === "BUTTON") {
-      return;
-    }
-
-  socket.emit("clickEvent")  
-    showToast(
-      "Você saiu do modo hibernação, não ouse em clicar novamente na tela!!!\nCoisas terríveis podem acontecer!!!"
-    );
+  
+container.addEventListener("click", function (event) {
+  if (event.target === container) {
+      socket.emit("clickEvent");
+  }
 });
 
 const socket = io("", {
@@ -139,6 +132,11 @@ socket.on('invalidRoom', () => {
 
 socket.on('roomFinished', () => {
   window.location.href = `/ranking?room=${roomId}`;
+})
+
+socket.on('playVideo', () => {
+    console.log('playVideo');
+    
 })
 
 function start(e) {
