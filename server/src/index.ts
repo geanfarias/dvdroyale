@@ -9,6 +9,7 @@ import SocketRoom from './websocket/SocketRoom';
 import bodyParser from 'body-parser';
 import RoomController from './controller/room.controller';
 import PlayerController from './controller/player.controller';
+import Room from './model/room.model';
 
 const app = express()
 const port = 3000
@@ -94,6 +95,11 @@ io.on('connection', async (socket) => {
 
   socket.on('forceCorner', () => {
     player.viciar();
+  })
+
+  socket.on('executeSurprise', (msg) => {
+    console.log(msg)
+    game.executeSurprise(player, msg.id)
   })
 
 });

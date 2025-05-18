@@ -3,7 +3,7 @@ import Room from '../model/room.model'
 export default class RoomController {
     async createRoom(ownerUuid: string) {
         const cretedRoom = await Room.create({
-            owner: ownerUuid,
+            // owner: ownerUuid,
         });
         return cretedRoom.dataValues;
     }

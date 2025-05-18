@@ -13,8 +13,8 @@ RoomRouter.post(BASE_URL, async (req, res) => {
         if (uuid == null || uuid == '') {
             throw new Error('Missing required data');
         } else {
-            const createdRoom = await controller.createRoom(uuid);
-            res.redirect(`/?room=${createdRoom.id}`);
+            // const createdRoom = await controller.createRoom(uuid);
+            res.redirect(`/?room=0a79e357-5c34-44e0-bb86-a86bfd666b15`);
         }
     } catch (e) {
         console.debug(e);

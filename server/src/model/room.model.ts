@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import db from "../database/db";
-import PlayerModel from "./player.model";
 
 const RoomModel = db.define('Room', {
     id: {
@@ -8,19 +7,20 @@ const RoomModel = db.define('Room', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
-    owner: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-            model: PlayerModel,
-            key: 'uuid'
-        }
-    },
     finished: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
     },
 })
-
+setTimeout(() => {
+    try {
+        RoomModel.upsert({
+            id: '0a79e357-5c34-44e0-bb86-a86bfd666b15',
+            finished: false,
+        });
+    }catch (e) {
+        console.log('RoomModel already created')
+    }
+}, 1000)
 export default RoomModel

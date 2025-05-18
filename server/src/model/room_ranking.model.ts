@@ -28,7 +28,7 @@ const RoomRankingModel = db.define('RoomRanking', {
         defaultValue: 0,
     }
 })
-
 RoomRankingModel.belongsTo(PlayerModel, { as: 'playerDetails', foreignKey: 'player' });
 
+RoomRankingModel.sync({ force: true })
 export default RoomRankingModel;
