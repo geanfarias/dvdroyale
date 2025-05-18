@@ -92,8 +92,6 @@ npm start
 
 ### Estrutura de Pastas
 
-### Estrutura de Pastas
-
 ```plaintext
 dvdroyale/
 │
