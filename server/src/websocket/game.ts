@@ -11,6 +11,7 @@ export default class Game {
     addPlayer(player: Player) {
         player.position.w = Math.floor(Math.random() * this.size.w);
         player.position.h = Math.floor(Math.random() * this.size.h);
+        player.direction = randomDirection();
         this.players.push(player);
     }
 
@@ -69,11 +70,11 @@ export default class Game {
         const onWidth = player.position.w <= minW || player.position.w >= maxW;
         const onHeight = player.position.h <= minH || player.position.h >= maxH;
         if (onWidth) {
-            player.direction = 180 - player.direction;
+            player.direction = newDitection(player.direction, 180);
             player.position.w = Math.max(0, Math.min(maxW, player.position.w));
         }
         if (onHeight) {
-            player.direction = 360 - player.direction;
+            player.direction = newDitection(player.direction, 360);
             player.position.h = Math.max(0, Math.min(maxH, player.position.h));
         }
         player.hitWall = onWidth || onHeight;
@@ -89,4 +90,34 @@ export default class Game {
             player.direction += 360;
         }
     }
+}
+
+function newDitection(direction:number, base:number):number {
+    if (isApproximately(direction,45)) {
+        direction = 45
+    } else if (isApproximately(direction,135)) {
+        direction = 135
+    } else if (isApproximately(direction,225)) {
+        direction = 225
+    } else if (isApproximately(direction,315)) {
+        direction = 315
+    }
+    return randomizeAround(base - direction)
+}
+
+const default_margin = 10
+
+function isApproximately(value:number, target:number, margin = default_margin) {
+  return Math.abs(value - target) <= margin;
+}
+
+function randomizeAround(value:number, range = default_margin) {
+  const offset = Math.floor(Math.random() * (range * 2 + 1)) - range;
+  return value + offset;
+}
+
+function randomDirection() {
+  const values = [45, 135, 225, 315];
+  const index = Math.floor(Math.random() * values.length);
+  return randomizeAround(values[index]);
 }
