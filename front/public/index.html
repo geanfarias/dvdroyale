@@ -9,31 +9,19 @@
   </head>
 
   <body>
-    <div class="overlay"></div>
-    <div class="container" style="z-index: 2;"></div>
-<!-- 
-    <div class="controls" id="controls">
-        <div class="speed-control">
-            <label for="speedSlider">Velocidade:</label>
-            <input type="range" id="speedSlider" min="0.5" max="10" step="0.5" value="2">
-            <span class="speed-value" id="speedValue">2.0</span>
-            <button id="speedUpButton">Aumentar Velocidade</button>
-            <button id="speedDownButton">Diminuir Velocidade</button>
-        </div>
-        <div class="logo-control">
-            <label for="logoCount">Logos:</label>
-            <input type="range" id="logoCount" min="1" max="10" step="1" value="1">
-            <span class="logo-value" id="logoValue">1</span>
-            <button id="updateLogos" class="update-button">Atualizar</button>
-        </div>
-    </div>
-    
-    
-    <button class="toggle-controls" id="toggleControls">⚙️</button> -->
-    <div id="toast" style="z-index: 2;"></div>
+    <div class="ranking">
 
-    <button id="startButton" style="z-index: 2;">start</button>
-    <button id="forceCorner" style="z-index: 2;">Force corner</button>
+    </div>
+    <div class="container"></div>
+    <div id="toast"></div>
+
+    <template>
+        <div class="js-name"></div>
+        <div class="js-score"></div>
+    </template>
+
+    <button id="startButton">start</button>
+    <button id="forceCorner">Force corner</button>
     <script src="script.js" type="module"></script>
   </body>
 </html>
