@@ -128,6 +128,10 @@ class DvdLogo {
       this.element.style.backgroundImage = `url(${logoPath.dvdGold})`;
     }
   }
+
+  remove() {
+    this.element.remove();
+  }
 }
 
 function createLogo(user) {
@@ -244,6 +248,15 @@ socket.on("connect", () => {
 
 socket.on("disconnect", () => {
   console.log("Disconnected from server");
+});
+
+socket.on("playerDisconnected", (player) => {
+    const logo = logos.find((logo) => logo.user.id === player.id);
+    
+    if (logo) {
+        logo.remove();
+        logos = logos.filter((l) => l.user.id !== player.id);
+    }
 });
 
 socket.on("toast", (msg) => {
