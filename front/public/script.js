@@ -237,15 +237,15 @@ socket.on('toast', (msg) => {
   showToast(msg.message);
 })
 
+socket.on('invalidRoom', () => {
+  window.location.href = '/login';
+});
+
+socket.on('roomFinished', () => {
+  window.location.href = `/ranking?room=${roomId}`;
+})
+
 function start(e) {
-  socket.on('invalidRoom', () => {
-    window.location.href = '/login';
-  });
-
-  socket.on('roomFinished', () => {
-    window.location.href = `/ranking?room=${roomId}`;
-  })
-
   // Inicializar o jogo
   socket.emit("startGame");
 }
