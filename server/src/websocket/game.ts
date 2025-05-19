@@ -33,13 +33,13 @@ export default class Game {
     }
 
     disconnectPlayer(player: Player) {
-        if ((this.players.length - 1) == 0 && this.started) {
-            console.log("No players left, ending game");
+        // if ((this.players.length - 1) == 0 && this.started) {
+        //     console.log("No players left, ending game");
 
-            console.log(this.rankingMap)
-            roomRankingController.save(this.roomId, this.rankingMap);
-            roomController.markAsFinished(this.roomId);
-        }
+        //     console.log(this.rankingMap)
+        //     roomRankingController.save(this.roomId, this.rankingMap);
+        //     roomController.markAsFinished(this.roomId);
+        // }
 
         const playerIndex = this.players.findIndex(p => p == player);
         if (playerIndex !== -1) {
