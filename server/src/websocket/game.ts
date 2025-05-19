@@ -32,7 +32,7 @@ export default class Game {
         this.players.push(player);
         if (this.started) {
             this.players.forEach(p => {
-                
+
                 p.socket.emit('playerConnected', player.toSerializable());
             });
             const playerData = this.players.map(player => ({
@@ -40,6 +40,10 @@ export default class Game {
                 position: player.position,
             }));
             player.socket.emit('gameStart', playerData);
+            if (this.surprises.length > 0) {
+                const surprise = this.surprises[0];
+                player.socket.emit('surprise', surprise);
+            }
         }
     }
 
