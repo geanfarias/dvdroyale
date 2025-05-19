@@ -72,16 +72,16 @@ export default class Game {
     updateGame() {
          if (!this.started) return
 
-        const dateNow = new Date();
-        const timeDiff = dateNow.getTime() - this.startTime!.getTime();
-        const diffInSeconds = Math.floor(timeDiff / 1000);
-        const diffInMinutes = Math.floor(diffInSeconds / 60);
-        if (diffInMinutes >= 5) {
-            this.players.forEach(player => {
-                player.socket.emit('roomFinished');
-                player.socket.disconnect();
-            });
-        }
+        // const dateNow = new Date();
+        // const timeDiff = dateNow.getTime() - this.startTime!.getTime();
+        // const diffInSeconds = Math.floor(timeDiff / 1000);
+        // const diffInMinutes = Math.floor(diffInSeconds / 60);
+        // if (diffInMinutes >= 5) {
+        //     this.players.forEach(player => {
+        //         player.socket.emit('roomFinished');
+        //         player.socket.disconnect();
+        //     });
+        // }
         if (this.surprises.length == 0 && Math.random() < this.chanceSurprise) {
             this.addSurprise();
         } else if (this.surprises.length > 0) {
