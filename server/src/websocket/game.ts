@@ -30,6 +30,17 @@ export default class Game {
         player.position.h = Math.floor(Math.random() * this.size.h);
         player.direction = randomDirection();
         this.players.push(player);
+        if (this.started) {
+            this.players.forEach(p => {
+                
+                p.socket.emit('playerConnected', player.toSerializable());
+            });
+            const playerData = this.players.map(player => ({
+                id: player.uuid,
+                position: player.position,
+            }));
+            player.socket.emit('gameStart', playerData);
+        }
     }
 
     disconnectPlayer(player: Player) {
