@@ -176,9 +176,20 @@ function setPlayers(players) {
 
   for (let i = 0; i < userLength; i++) {
     const player = players[i];
-    logos.push(createLogo(player));
+    const logo = logos.find((logo) => logo.user.id === player.id);
+
+  if (!logo) logos.push(createLogo(player));
   }
 }
+
+socket.on("playerConnected", (user) => {
+  const logo = logos.find((logo) => logo.user.id === user.id);
+
+  if (logo) return;
+
+  const newLogo = createLogo(user);
+  logos.push(newLogo);
+});
 
 socket.on("gameStart", (players) => {
   setPlayers(players);
